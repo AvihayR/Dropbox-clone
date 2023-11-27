@@ -1,14 +1,49 @@
 'use client'
+import { useUser } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
+import { useState } from 'react'
 import DropzoneCmp from 'react-dropzone'
+import { uploadPost, maxSize } from '@/services/files.service'
+import { db, storage } from '@/firebase'
+import { addDoc, updateDoc } from 'firebase/firestore'
+import { collection, serverTimestamp, doc } from 'firebase/firestore'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+
 
 function Dropzone() {
+    const [loading, setLoading] = useState(false)
+    const { isLoaded, isSignedIn, user } = useUser()
 
-    const maxSize = 20971520
+    const onDrop = (acceptedFiles: File[]) => {
+        acceptedFiles.forEach(file => {
+            const reader = new FileReader()
 
+            reader.onabort = () => console.log('Filed reading was aborted')
+            reader.onerror = () => console.log('Filed reading has failed')
+            reader.onload = async () => {
+                await onUploadPost(file)
+            }
+            reader.readAsArrayBuffer(file)
+        })
+    }
+
+    const onUploadPost = async (selectedFile: File) => {
+        if (loading) return
+        if (!user) return
+
+        setLoading(true)
+
+        uploadPost(user, selectedFile)
+
+        setLoading(false)
+    }
 
     return (
-        <DropzoneCmp minSize={0} maxSize={maxSize} onDrop={acceptedFiles => console.log(acceptedFiles)}>
+        <DropzoneCmp
+            minSize={0}
+            maxSize={maxSize}
+            onDrop={onDrop}
+        >
             {({ getRootProps,
                 getInputProps,
                 isDragActive,
