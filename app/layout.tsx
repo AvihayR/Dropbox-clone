@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import { ThemeProvider } from '@/components/ThemeProvider'
 const inter = Inter({ subsets: ['latin'] })
 import { Toaster } from 'react-hot-toast'
+import Providers from '@/providers'
 
 export const metadata: Metadata = {
   title: 'Dropbox clone',
@@ -21,6 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
+          <Providers />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
