@@ -14,6 +14,7 @@ import {
 import { useAppStore } from "@/store/store"
 import { useUser } from "@clerk/nextjs"
 import { deletePost } from "@/services/files.service"
+import toast from "react-hot-toast"
 
 export function DeleteModal() {
     const { user } = useUser()
@@ -32,7 +33,13 @@ export function DeleteModal() {
 
     async function deleteFile() {
         if (!user || !fileId) return
+        const toastId = toast.loading('Deleting..')
+
         deletePost(user.id, fileId)
+
+        toast.success('Deleted successfully!', {
+            id: toastId
+        })
         setIsDeleteModalOpen(false)
     }
 

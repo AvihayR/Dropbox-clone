@@ -7,6 +7,8 @@ import { DialogTitle } from "@radix-ui/react-dialog"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { updatePost } from "@/services/files.service"
+import toast from "react-hot-toast"
+
 
 function RenameModal() {
     const { user } = useUser()
@@ -27,12 +29,15 @@ function RenameModal() {
 
     async function renameFile() {
         if (!user || !fileId) return
+        const toastId = toast.loading('Renaming..')
 
         updatePost(user.id, fileId, input)
 
+        toast.success('Renamed successfully', {
+            id: toastId
+        })
         setInput('')
         setIsRenameModalOpen(false)
-
     }
 
     return (
