@@ -1,8 +1,9 @@
 import { db, storage } from '@/firebase'
 import { addDoc, updateDoc } from 'firebase/firestore'
-import { getDocs, collection, serverTimestamp, doc } from 'firebase/firestore'
+import { query, orderBy, getDocs, collection, serverTimestamp, doc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import type { UserResource } from '@clerk/types'
+
 
 export const maxSize = 20971520
 
@@ -29,4 +30,12 @@ export async function uploadPost(user: UserResource, selectedFile: File) {
 
 export async function getPosts(userId: string | null) {
     return getDocs(collection(db, 'users', userId!, 'files'))
+}
+
+export function getSortedPosts(userId: string | null, sort: 'asc' | 'desc') {
+    return query(
+        collection(db, 'users', userId!, 'files'),
+        orderBy('timestamp', sort)
+    )
+
 }

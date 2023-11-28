@@ -4,7 +4,6 @@ import { getPosts } from "@/services/files.service"
 import { FileType } from "@/typings"
 import { auth } from "@clerk/nextjs"
 
-
 async function Dashboard() {
     const { userId } = auth()
 
