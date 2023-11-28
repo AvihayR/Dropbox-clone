@@ -20,6 +20,7 @@ import { TrashIcon } from 'lucide-react'
 import { useAppStore } from "@/store/store"
 import { FileType } from "@/typings"
 import { ReactNode } from "react"
+import { DeleteModal } from "./DeleteModal"
 
 
 interface DataTableProps<TData, TValue> {
@@ -91,6 +92,7 @@ export function DataTable<TData, TValue>({
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
                             >
+                                <DeleteModal />
                                 {row.getVisibleCells().map((cell) => (
                                     (cell.column.id === 'filename') ?
                                         <TableCell
