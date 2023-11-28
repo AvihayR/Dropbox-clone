@@ -11,11 +11,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { db, storage } from "@/firebase"
 import { useAppStore } from "@/store/store"
 import { useUser } from "@clerk/nextjs"
-import { deleteObject, ref } from "firebase/storage"
-import { deleteDoc, doc } from "firebase/firestore"
+import { deletePost } from "@/services/files.service"
 
 export function DeleteModal() {
     const { user } = useUser()
@@ -34,16 +32,7 @@ export function DeleteModal() {
 
     async function deleteFile() {
         if (!user || !fileId) return
-        const fileRef = ref(storage, `users/${user.id}/files/${fileId}`)
-
-        try {
-            await deleteObject(fileRef)
-            await deleteDoc(doc(db, 'users', user.id, 'files', fileId))
-            console.log('Deleted!')
-        } catch (err) {
-            console.log(err)
-        }
-
+        deletePost(user.id, fileId)
         setIsDeleteModalOpen(false)
     }
 

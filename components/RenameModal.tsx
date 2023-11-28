@@ -6,8 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader } from "./ui/dia
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
-import { updateDoc, doc } from "firebase/firestore"
-import { db } from "@/firebase"
+import { updatePost } from "@/services/files.service"
 
 function RenameModal() {
     const { user } = useUser()
@@ -28,9 +27,9 @@ function RenameModal() {
 
     async function renameFile() {
         if (!user || !fileId) return
-        await updateDoc(doc(db, 'users', user.id, 'files', fileId), {
-            filename: input
-        })
+
+        updatePost(user.id, fileId, input)
+
         setInput('')
         setIsRenameModalOpen(false)
 

@@ -1,7 +1,7 @@
 import { db, storage } from '@/firebase'
 import { addDoc, updateDoc } from 'firebase/firestore'
-import { query, orderBy, getDocs, collection, serverTimestamp, doc } from 'firebase/firestore'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { deleteDoc, query, orderBy, getDocs, collection, serverTimestamp, doc } from 'firebase/firestore'
+import { deleteObject, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import type { UserResource } from '@clerk/types'
 
 
@@ -37,5 +37,23 @@ export function getSortedPosts(userId: string | null, sort: 'asc' | 'desc') {
         collection(db, 'users', userId!, 'files'),
         orderBy('timestamp', sort)
     )
+}
 
+export async function deletePost(userId: string, fileId: string) {
+    const fileRef = ref(storage, `users/${userId}/files/${fileId}`)
+
+    try {
+        await deleteObject(fileRef)
+        await deleteDoc(doc(db, 'users', userId, 'files', fileId))
+        console.log('Deleted!')
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+export async function updatePost(userId: string, fileId: string, input: string) {
+    await updateDoc(doc(db, 'users', userId, 'files', fileId), {
+        filename: input
+    })
 }
