@@ -25,5 +25,5 @@ export const useAppStore = create<AppState>()((set) => ({
     setIsDeleteModalOpen: (open: boolean) => set((state) => ({ isDeleteModalOpen: open })),
 
     isRenameModalOpen: false,
-    setIsRenameModalOpen: (open: boolean) => set((state) => ({ isDeleteModalOpen: open })),
+    setIsRenameModalOpen: (open: boolean) => set((state) => ({ isRenameModalOpen: open })),
 }))

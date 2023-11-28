@@ -21,6 +21,7 @@ import { useAppStore } from "@/store/store"
 import { FileType } from "@/typings"
 import { ReactNode } from "react"
 import { DeleteModal } from "./DeleteModal"
+import RenameModal from "./RenameModal"
 
 
 interface DataTableProps<TData, TValue> {
@@ -59,6 +60,7 @@ export function DataTable<TData, TValue>({
     }
 
     const openRenameModal = (fileId: string, filename: string) => {
+        console.log('Rename modal')
         setFileId(fileId)
         setFilename(filename)
         setIsRenameModalOpen(true)
@@ -93,6 +95,7 @@ export function DataTable<TData, TValue>({
                                 data-state={row.getIsSelected() && "selected"}
                             >
                                 <DeleteModal />
+                                <RenameModal />
                                 {row.getVisibleCells().map((cell) => (
                                     (cell.column.id === 'filename') ?
                                         <TableCell
